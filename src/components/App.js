@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 
 import Header from 'components/header/Header';
-import StockManagement from 'components/stock-management/StockManagement';
-import StockManagement2 from 'components/stock-management/StockManagement2';
+import Ingredient from 'components/ingredient/Ingredient';
 
 const styles = theme => ({
   root: {
@@ -19,20 +16,13 @@ const styles = theme => ({
 class App extends Component {
   render() {
     const { classes } = this.props;
-    
+
     return (
       <div className="App">
         <Header />
-        <Paper className={classes.root} elevation={1}>
-          <Typography variant="h5" component="h3">
-            Ingredient management
-          </Typography>
-          <Typography component="p">
-            Here...
-          </Typography>
-          <StockManagement />
-          <StockManagement2 />
-        </Paper>
+        <div className={classes.root}>
+          <Ingredient />
+        </div>
       </div>
     );
   }
