@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,7 +13,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Create';
 
+import { getIngredients } from 'utils/IngredientApi';
+
 const styles = theme => ({
+  loader: {
+    flexGrow: 1,
+    marginTop: 80,
+    marginBottom: 80,
+  },
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
@@ -23,63 +31,76 @@ const styles = theme => ({
   },
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159),
-  createData('Ice cream sandwich', 237),
-  createData('Eclair', 262),
-  createData('Cupcake', 305),
-  createData('Gingerbread', 356),
-];
-
 class IngredientList extends Component {
+
+  state = {
+    loading: true,
+    ingredients: [],
+  };
+
+  componentDidMount = () => {
+    getIngredients()
+      .then(data => {
+        this.setState({
+          ingredients: data,
+        });
+      })
+      .then((projects) => this.setState({
+        loading: false,
+      }));
+  };
+
   render() {
     const { classes, openModal, displaySnackbar } = this.props;
+    const { loading, ingredients } = this.state;
 
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Ingredient</TableCell>
-              <TableCell numeric>Quantity (g)</TableCell>
-              <TableCell numeric>Update</TableCell>
-              <TableCell numeric>Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell numeric>{row.calories}</TableCell>
-                  <TableCell numeric>
-                    <Tooltip title="Update" onClick={openModal}>
-                      <IconButton aria-label="Update">
-                        <UpdateIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell numeric>
-                    <Tooltip title="Delete" onClick={displaySnackbar}>
-                      <IconButton aria-label="Delete">
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
+      <>
+      {loading ? (
+        <div className={classes.loader}>
+          <LinearProgress color="secondary" />
+        </div>
+        ) : (
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Ingredient</TableCell>
+                <TableCell numeric>Quantity (g)</TableCell>
+                <TableCell numeric>Update</TableCell>
+                <TableCell numeric>Delete</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ingredients.map((row, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell numeric>{row.quantity}</TableCell>
+                    <TableCell numeric>
+                      <Tooltip title="Update" onClick={openModal}>
+                        <IconButton aria-label="Update">
+                          <UpdateIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell numeric>
+                      <Tooltip title="Delete" onClick={displaySnackbar}>
+                        <IconButton aria-label="Delete">
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
+      )}
+      </>
     );
   }
 }
