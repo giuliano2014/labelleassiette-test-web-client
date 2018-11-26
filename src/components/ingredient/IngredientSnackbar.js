@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -12,39 +12,37 @@ const styles = theme => ({
   },
 });
 
-class SimpleSnackbar extends React.Component {
+class SimpleSnackbar extends Component {
   render() {
     const { classes, open, hideSnackbar } = this.props;
     return (
-      <div>
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          open={open}
-          autoHideDuration={6000}
-          onClose={hideSnackbar}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">Ingredient deleted</span>}
-          action={[
-            <Button key="undo" color="secondary" size="small" onClick={hideSnackbar}>
-              UNDO
-            </Button>,
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={hideSnackbar}
-            >
-              <CloseIcon />
-            </IconButton>,
-          ]}
-        />
-      </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={hideSnackbar}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">Ingredient deleted</span>}
+        action={[
+          <Button key="undo" color="secondary" size="small" onClick={hideSnackbar}>
+            UNDO
+          </Button>,
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={hideSnackbar}
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
     );
   }
 }
