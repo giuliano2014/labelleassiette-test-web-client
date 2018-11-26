@@ -42,46 +42,44 @@ class IngredientList extends Component {
     const { classes, openModal, displaySnackbar } = this.props;
 
     return (
-      <>
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Ingredient</TableCell>
-                <TableCell numeric>Quantity (g)</TableCell>
-                <TableCell numeric>Update</TableCell>
-                <TableCell numeric>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell numeric>{row.calories}</TableCell>
-                    <TableCell numeric>
-                      <Tooltip title="Update" onClick={openModal}>
-                        <IconButton aria-label="Update">
-                          <UpdateIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell numeric>
-                      <Tooltip title="Delete" onClick={displaySnackbar}>
-                        <IconButton aria-label="Delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
-      </>
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Ingredient</TableCell>
+              <TableCell numeric>Quantity (g)</TableCell>
+              <TableCell numeric>Update</TableCell>
+              <TableCell numeric>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map(row => {
+              return (
+                <TableRow key={row.id}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell numeric>{row.calories}</TableCell>
+                  <TableCell numeric>
+                    <Tooltip title="Update" onClick={openModal}>
+                      <IconButton aria-label="Update">
+                        <UpdateIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell numeric>
+                    <Tooltip title="Delete" onClick={displaySnackbar}>
+                      <IconButton aria-label="Delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }
