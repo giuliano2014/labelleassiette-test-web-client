@@ -50,8 +50,12 @@ class IngredientList extends Component {
       }));
   };
 
+  displayModal = (id, name, quantity) => {
+    this.props.openModal('update', id, name, quantity);
+  };
+
   render() {
-    const { classes, openModal, displaySnackbar } = this.props;
+    const { classes, displaySnackbar } = this.props;
     const { loading, ingredients } = this.state;
 
     return (
@@ -65,6 +69,7 @@ class IngredientList extends Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
+                <TableCell>id</TableCell>
                 <TableCell>Ingredient</TableCell>
                 <TableCell numeric>Quantity (g)</TableCell>
                 <TableCell numeric>Update</TableCell>
@@ -76,18 +81,21 @@ class IngredientList extends Component {
                 return (
                   <TableRow key={index}>
                     <TableCell component="th" scope="row">
+                      {row._id}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
                     <TableCell numeric>{row.quantity}</TableCell>
                     <TableCell numeric>
-                      <Tooltip title="Update" onClick={openModal}>
+                      <Tooltip title="Update" onClick={() => this.displayModal(row._id, row.name, row.quantity)}>
                         <IconButton aria-label="Update">
                           <UpdateIcon />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
                     <TableCell numeric>
-                      <Tooltip title="Delete" onClick={displaySnackbar}>
+                      <Tooltip title="Delete" onClick={() => displaySnackbar(row._id, row.name)}>
                         <IconButton aria-label="Delete">
                           <DeleteIcon />
                         </IconButton>

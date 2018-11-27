@@ -5,17 +5,27 @@ import IngredientList from 'components/ingredient/IngredientList';
 import IngredientModal from 'components/ingredient/IngredientModal';
 import IngredientSnackbar from 'components/ingredient/IngredientSnackbar';
 
+import { deleteIngredient } from 'utils/IngredientApi';
+
 export default class Ingredient extends Component {
   state = {
     modalType: null,
+    currentId: null,
+    currentName: '',
+    currentQuantity: '',
     isModalOpened: false,
     isSnackbarDisplay: false,
   };
 
-  openModal = (type = 'add') => {
+  openModal = (type = 'add', id = null, name = '', quantity = '') => {
     this.setState({
       modalType: type,
+      currentId: id,
+      currentName: name,
+      currentQuantity: quantity,
       isModalOpened: true,
+      id: null,
+      name: null,
     });
   };
 
@@ -23,25 +33,44 @@ export default class Ingredient extends Component {
     this.setState({ isModalOpened: false });
   };
 
-  displaySnackbar = () => {
-    this.setState({ isSnackbarDisplay: true });
+  displaySnackbar = (id, name) => {
+    this.setState({
+      isSnackbarDisplay: true,
+      id: id,
+      name: name,
+    });
   };
 
-  hideSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
+  hideSnackbar = () => {
     this.setState({ isSnackbarDisplay: false });
+  };
+
+  deleteIngredient = () => {
+    deleteIngredient(this.state.id)
+      .then(() => this.setState({ isSnackbarDisplay: false }));
   };
 
   render() {
     return (
       <>
         <IngredientHeader openModal={() => this.openModal()} />
-        <IngredientList openModal={() => this.openModal('update')} displaySnackbar={this.displaySnackbar} />
-        <IngredientModal modalType={this.state.modalType} open={this.state.isModalOpened} onClose={this.closeModal} />
-        <IngredientSnackbar open={this.state.isSnackbarDisplay} hideSnackbar={this.hideSnackbar} />
+        <IngredientList
+          openModal={this.openModal}
+          displaySnackbar={this.displaySnackbar}
+        />
+        <IngredientModal
+          modalType={this.state.modalType}
+          currentId={this.state.currentId}
+          currentName={this.state.currentName}
+          currentQuantity={this.state.currentQuantity}
+          open={this.state.isModalOpened}
+          onClose={this.closeModal}
+        />
+        <IngredientSnackbar
+          open={this.state.isSnackbarDisplay}
+          hideSnackbar={this.hideSnackbar}
+          deleteIngredient={this.deleteIngredient}
+        />
       </>
     );
   }

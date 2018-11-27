@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { addIngredient } from 'utils/IngredientApi';
+import { addIngredient, updateIngredient } from 'utils/IngredientApi';
 
 export default class IngredientModal extends Component {
 
@@ -18,6 +18,20 @@ export default class IngredientModal extends Component {
       quantity: '',
     };
   }
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.currentName !== this.props.currentName) {
+      this.setState({
+        name: this.props.currentName,
+      });
+    }
+
+    if (prevProps.currentQuantity !== this.props.currentQuantity) {
+      this.setState({
+        quantity: this.props.currentQuantity,
+      });
+    }
+  };
 
   inputChange = (event) => {
     const target = event.target;
@@ -41,12 +55,16 @@ export default class IngredientModal extends Component {
           this.props.onClose();
         });
     } else {
-      console.log('do another thing');
+      updateIngredient(this.props.currentId, body)
+        .then(() => {
+          this.props.onClose();
+        });
     }
   }
 
   render() {
-    const {modalType, open, onClose} = this.props;
+    const { modalType, open, onClose } = this.props;
+    const { name, quantity } = this.state;
 
     return (
       <Dialog
@@ -70,6 +88,7 @@ export default class IngredientModal extends Component {
               shrink: true,
             }}
             name="name"
+            value={name}
             onChange={this.inputChange}
           />
           <TextField
@@ -83,6 +102,7 @@ export default class IngredientModal extends Component {
               shrink: true,
             }}
             name="quantity"
+            value={quantity}
             onChange={this.inputChange}
           />
         </DialogContent>

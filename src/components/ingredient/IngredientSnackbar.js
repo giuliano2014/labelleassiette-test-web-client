@@ -14,7 +14,8 @@ const styles = theme => ({
 
 class SimpleSnackbar extends Component {
   render() {
-    const { classes, open, hideSnackbar } = this.props;
+    const { classes, open, hideSnackbar, deleteIngredient } = this.props;
+
     return (
       <Snackbar
         anchorOrigin={{
@@ -23,21 +24,21 @@ class SimpleSnackbar extends Component {
         }}
         open={open}
         autoHideDuration={6000}
-        onClose={hideSnackbar}
+        onClose={deleteIngredient}
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
         message={<span id="message-id">Ingredient deleted</span>}
         action={[
           <Button key="undo" color="secondary" size="small" onClick={hideSnackbar}>
-            UNDO
+            ANNULÉ
           </Button>,
           <IconButton
             key="close"
             aria-label="Close"
             color="inherit"
             className={classes.close}
-            onClick={hideSnackbar}
+            onClick={deleteIngredient}
           >
             <CloseIcon />
           </IconButton>,
