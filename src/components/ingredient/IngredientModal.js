@@ -7,18 +7,57 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import { addIngredient } from 'utils/IngredientApi';
+
 export default class IngredientModal extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      quantity: '',
+    };
+  }
+
+  inputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    const body = {
+      name: this.state.name,
+      quantity: this.state.quantity,
+    };
+
+    if (this.props.modalType === 'add') {
+      addIngredient(body)
+        .then(() => {
+          this.props.onClose();
+        });
+    } else {
+      console.log('do another thing');
+    }
+  }
+
   render() {
+    const {modalType, open, onClose} = this.props;
+
     return (
       <Dialog
-        open={this.props.open}
-        onClose={this.props.onClose}
+        open={open}
+        onClose={onClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Ingredient</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You can update the information of the ingredient.
+            {modalType === 'add' ? 'You can add a new ingredient.' : 'You can update the information of the ingredient.'}
           </DialogContentText>
           <TextField
             label="Name"
@@ -30,6 +69,8 @@ export default class IngredientModal extends Component {
             InputLabelProps={{
               shrink: true,
             }}
+            name="name"
+            onChange={this.inputChange}
           />
           <TextField
             label="Quantity"
@@ -41,14 +82,16 @@ export default class IngredientModal extends Component {
             InputLabelProps={{
               shrink: true,
             }}
+            name="quantity"
+            onChange={this.inputChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={this.props.onClose} >
+          <Button color="primary" onClick={onClose} >
             Cancel
           </Button>
-          <Button color="primary" onClick={this.props.onClose} >
-            Update
+          <Button color="primary" onClick={this.handleSubmit} >
+            {modalType === 'add' ? 'Save' : 'Update'}
           </Button>
         </DialogActions>
       </Dialog>

@@ -7,12 +7,16 @@ import IngredientSnackbar from 'components/ingredient/IngredientSnackbar';
 
 export default class Ingredient extends Component {
   state = {
+    modalType: null,
     isModalOpened: false,
     isSnackbarDisplay: false,
   };
 
-  openModal = () => {
-    this.setState({ isModalOpened: true });
+  openModal = (type = 'add') => {
+    this.setState({
+      modalType: type,
+      isModalOpened: true,
+    });
   };
 
   closeModal = () => {
@@ -34,9 +38,9 @@ export default class Ingredient extends Component {
   render() {
     return (
       <>
-        <IngredientHeader openModal={this.openModal} />
-        <IngredientList openModal={this.openModal} displaySnackbar={this.displaySnackbar} />
-        <IngredientModal open={this.state.isModalOpened} onClose={this.closeModal} />
+        <IngredientHeader openModal={() => this.openModal()} />
+        <IngredientList openModal={() => this.openModal('update')} displaySnackbar={this.displaySnackbar} />
+        <IngredientModal modalType={this.state.modalType} open={this.state.isModalOpened} onClose={this.closeModal} />
         <IngredientSnackbar open={this.state.isSnackbarDisplay} hideSnackbar={this.hideSnackbar} />
       </>
     );

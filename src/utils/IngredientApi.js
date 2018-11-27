@@ -8,4 +8,14 @@ const getIngredients = () => {
     .catch(err => console.error(err));
 };
 
-export { getIngredients };
+const addIngredient = (data) => {
+  return axios.post(`${apiUrl}/api/ingredients/`, data)
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
+export { getIngredients, addIngredient };
