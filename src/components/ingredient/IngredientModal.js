@@ -15,7 +15,7 @@ export default class IngredientModal extends Component {
     quantity: '',
   };
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (prevProps.currentName !== this.props.currentName) {
       this.setState({
         name: this.props.currentName,
@@ -45,29 +45,28 @@ export default class IngredientModal extends Component {
       quantity: this.state.quantity,
     };
 
-    // ??? Switch instead
     if (this.props.modalType === 'add') {
       addIngredient(body)
         .then(() => {
           this.closeModal();
+          this.props.refreshComponent();
         });
     } else {
       updateIngredient(this.props.currentId, body)
         .then(() => {
           this.closeModal();
+          this.props.refreshComponent();
         });
     }
-
-    this.props.refreshComponent(); // ??? In every conditions above
   };
 
   closeModal = () => {
-    this.props.closeModal();
-
     this.setState({
       name: '',
       quantity: '',
     });
+
+    this.props.closeModal();
   };
 
   render() {

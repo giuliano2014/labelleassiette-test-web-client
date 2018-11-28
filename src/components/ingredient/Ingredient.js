@@ -64,7 +64,7 @@ export default class Ingredient extends Component {
           currentName: '',
           isSnackbarDisplay: false,
           isIngredientDeleted: true,
-        })
+        });
       });
   };
 

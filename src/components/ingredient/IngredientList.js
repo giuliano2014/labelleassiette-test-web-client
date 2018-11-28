@@ -32,7 +32,6 @@ const styles = theme => ({
 });
 
 class IngredientList extends Component {
-
   state = {
     loading: true,
     ingredients: [],
@@ -42,7 +41,7 @@ class IngredientList extends Component {
     this.getIngredients();
   };
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (prevProps.isButtonclicked !== this.props.isButtonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
       this.getIngredients();
     }
@@ -59,9 +58,11 @@ class IngredientList extends Component {
           ingredients: data,
         });
       })
-      .then((projects) => this.setState({
-        loading: false,
-      }));
+      .then(() => {
+        this.setState({
+          loading: false,
+        });
+      });
   }
 
   render() {
