@@ -43,6 +43,13 @@ export default class IngredientModal extends Component {
     });
   };
 
+  onCloseModal = () => {
+    this.setState({
+      name: '',
+      quantity: '',
+    }, this.props.onClose());
+  };
+
   handleSubmit = (event) => {
     const body = {
       name: this.state.name,
@@ -60,16 +67,18 @@ export default class IngredientModal extends Component {
           this.props.onClose();
         });
     }
+
+    this.props.refreshComponent();
   }
 
   render() {
-    const { modalType, open, onClose } = this.props;
+    const { modalType, open } = this.props;
     const { name, quantity } = this.state;
 
     return (
       <Dialog
         open={open}
-        onClose={onClose}
+        onClose={this.onCloseModal}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Ingredient</DialogTitle>
@@ -107,7 +116,7 @@ export default class IngredientModal extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose} >
+          <Button color="primary" onClick={this.onCloseModal} >
             Cancel
           </Button>
           <Button color="primary" onClick={this.handleSubmit} >

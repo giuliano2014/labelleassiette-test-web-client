@@ -39,6 +39,20 @@ class IngredientList extends Component {
   };
 
   componentDidMount = () => {
+    this.getIngredients();
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.isButonclicked !== this.props.isButonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
+      this.getIngredients();
+    }
+  };
+
+  displayModal = (id, name, quantity) => {
+    this.props.openModal('update', id, name, quantity);
+  };
+
+  getIngredients = () => {
     getIngredients()
       .then(data => {
         this.setState({
@@ -48,11 +62,7 @@ class IngredientList extends Component {
       .then((projects) => this.setState({
         loading: false,
       }));
-  };
-
-  displayModal = (id, name, quantity) => {
-    this.props.openModal('update', id, name, quantity);
-  };
+  }
 
   render() {
     const { classes, displaySnackbar } = this.props;
@@ -69,8 +79,7 @@ class IngredientList extends Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>id</TableCell>
-                <TableCell>Ingredient</TableCell>
+                <TableCell>Ingredient(s)</TableCell>
                 <TableCell numeric>Quantity (g)</TableCell>
                 <TableCell numeric>Update</TableCell>
                 <TableCell numeric>Delete</TableCell>
@@ -80,9 +89,6 @@ class IngredientList extends Component {
               {ingredients.map((row, index) => {
                 return (
                   <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                      {row._id}
-                    </TableCell>
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>

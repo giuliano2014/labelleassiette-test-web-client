@@ -14,7 +14,7 @@ const styles = theme => ({
 
 class SimpleSnackbar extends Component {
   render() {
-    const { classes, open, hideSnackbar, deleteIngredient } = this.props;
+    const { classes, open, hideSnackbar, deleteIngredient, ingredientName } = this.props;
 
     return (
       <Snackbar
@@ -28,10 +28,10 @@ class SimpleSnackbar extends Component {
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">Ingredient deleted</span>}
+        message={<span id="message-id">{ingredientName} have been deleted</span>}
         action={[
           <Button key="undo" color="secondary" size="small" onClick={hideSnackbar}>
-            ANNULÉ
+            UNDO
           </Button>,
           <IconButton
             key="close"
