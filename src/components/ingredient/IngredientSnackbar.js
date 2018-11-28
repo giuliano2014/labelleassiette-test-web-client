@@ -56,6 +56,10 @@ class SimpleSnackbar extends Component {
 
 SimpleSnackbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  currentName: PropTypes.string.isRequired,
+  isSnackbarDisplay: PropTypes.bool.isRequired,
+  hideSnackbar: PropTypes.func.isRequired,
+  deleteIngredient: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(SimpleSnackbar);

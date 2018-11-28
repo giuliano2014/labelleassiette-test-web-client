@@ -122,6 +122,9 @@ class IngredientList extends Component {
 
 IngredientList.propTypes = {
   classes: PropTypes.object.isRequired,
+  isButtonclicked: PropTypes.bool.isRequired,
+  isIngredientDeleted: PropTypes.bool.isRequired,
+  displaySnackbar: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(IngredientList);

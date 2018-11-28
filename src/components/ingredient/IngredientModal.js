@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { addIngredient, updateIngredient } from 'utils/IngredientApi';
 
-export default class IngredientModal extends Component {
+class IngredientModal extends Component {
   state = {
     name: '',
     quantity: '',
@@ -125,3 +126,15 @@ export default class IngredientModal extends Component {
     );
   }
 }
+
+IngredientModal.propTypes = {
+  modalType: PropTypes.string,
+  currentId: PropTypes.string,
+  currentName: PropTypes.string.isRequired,
+  currentQuantity: PropTypes.string.isRequired,
+  isModalOpened: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  refreshComponent: PropTypes.func.isRequired,
+};
+
+export default IngredientModal;

@@ -45,6 +45,7 @@ class IngredientHeader extends Component {
 
 IngredientHeader.propTypes = {
   classes: PropTypes.object.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(IngredientHeader);
