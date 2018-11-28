@@ -15,7 +15,7 @@ export default class Ingredient extends Component {
     currentQuantity: '',
     isModalOpened: false,
     isSnackbarDisplay: false,
-    isButonclicked: false,
+    isButtonclicked: false,
     isIngredientDeleted: false,
   };
 
@@ -26,72 +26,90 @@ export default class Ingredient extends Component {
       currentName: name,
       currentQuantity: quantity,
       isModalOpened: true,
-      ingredientId: null,
-      ingredientName: null,
     });
   };
 
   closeModal = () => {
     this.setState({
+      currentId: null,
+      currentName: '',
+      currentQuantity: '',
       isModalOpened: false,
-      isButonclicked: false,
-    });
-  };
-
-  refreshComponent = () => {
-    this.setState({
-      isButonclicked: true,
+      isButtonclicked: false,
     });
   };
 
   displaySnackbar = (id, name) => {
     this.setState({
+      currentId: id,
+      currentName: name,
       isSnackbarDisplay: true,
-      ingredientId: id,
-      ingredientName: name,
       isIngredientDeleted: false,
     });
   };
 
   hideSnackbar = () => {
-    this.setState({ isSnackbarDisplay: false });
+    this.setState({
+      currentId: null,
+      currentName: '',
+      isSnackbarDisplay: false,
+    });
   };
 
   deleteIngredient = () => {
-    deleteIngredient(this.state.ingredientId)
+    deleteIngredient(this.state.currentId)
       .then(() => {
         this.setState({
+          currentId: null,
+          currentName: '',
           isSnackbarDisplay: false,
           isIngredientDeleted: true,
         })
       });
   };
 
+  refreshComponent = () => {
+    this.setState({
+      isButtonclicked: true,
+    });
+  };
+
   render() {
+    const {
+      modalType,
+      currentId,
+      currentName,
+      currentQuantity,
+      isModalOpened,
+      isSnackbarDisplay,
+      isButtonclicked,
+      isIngredientDeleted,
+    } = this.state;
+
     return (
       <>
         <IngredientHeader openModal={() => this.openModal()} />
         <IngredientList
-          isModalOpened={this.state.isModalOpened}
+          isModalOpened={isModalOpened}
+          isButtonclicked={isButtonclicked}
+          isIngredientDeleted={isIngredientDeleted}
           openModal={this.openModal}
           displaySnackbar={this.displaySnackbar}
-          isButonclicked={this.state.isButonclicked}
-          isIngredientDeleted={this.state.isIngredientDeleted}
         />
         <IngredientModal
-          modalType={this.state.modalType}
-          currentId={this.state.currentId}
-          currentName={this.state.currentName}
-          currentQuantity={this.state.currentQuantity}
-          open={this.state.isModalOpened}
-          onClose={this.closeModal}
+          modalType={modalType}
+          currentId={currentId}
+          currentName={currentName}
+          currentQuantity={currentQuantity}
+          isModalOpened={isModalOpened}
+          closeModal={this.closeModal}
           refreshComponent={this.refreshComponent}
         />
         <IngredientSnackbar
-          open={this.state.isSnackbarDisplay}
+          currentName={currentName}
+          isSnackbarDisplay={isSnackbarDisplay}
           hideSnackbar={this.hideSnackbar}
           deleteIngredient={this.deleteIngredient}
-          ingredientName={this.state.ingredientName}
         />
       </>
     );

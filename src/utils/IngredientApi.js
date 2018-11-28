@@ -1,47 +1,35 @@
 import axios from 'axios';
 
-import { apiUrl } from 'utils/constants';
+import { DOMAIN } from 'utils/constants';
 
 const getIngredients = () => {
-  return axios.get(`${apiUrl}/api/ingredients/`)
+  return axios.get(`${DOMAIN}/api/ingredients/`)
     .then(res => res.data)
     .catch(err => console.error(err));
 };
 
 const getCurrentIngredient = (id) => {
-  return axios.get(`${apiUrl}/api/ingredients/${id}`)
+  return axios.get(`${DOMAIN}/api/ingredients/${id}`)
     .then(res => res.data)
     .catch(err => console.error(err));
 };
 
 const addIngredient = (data) => {
-  return axios.post(`${apiUrl}/api/ingredients/`, data)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  return axios.post(`${DOMAIN}/api/ingredients/`, data)
+    .then(res => res.data)
+    .catch(err => console.error(err));
 };
 
 const updateIngredient = (id, data) => {
-  return axios.put(`${apiUrl}/api/ingredients/${id}`, data)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  return axios.put(`${DOMAIN}/api/ingredients/${id}`, data)
+  .then(res => res.data)
+  .catch(err => console.error(err));
 };
 
 const deleteIngredient = (id) => {
-  return axios.delete(`${apiUrl}/api/ingredients/${id}`)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  return axios.delete(`${DOMAIN}/api/ingredients/${id}`)
+  .then(res => res.data)
+  .catch(err => console.error(err));
 };
 
 export { getIngredients, getCurrentIngredient, addIngredient, updateIngredient, deleteIngredient };

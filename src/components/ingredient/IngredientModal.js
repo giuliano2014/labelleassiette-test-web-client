@@ -10,14 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { addIngredient, updateIngredient } from 'utils/IngredientApi';
 
 export default class IngredientModal extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      quantity: '',
-    };
-  }
+  state = {
+    name: '',
+    quantity: '',
+  };
 
   componentDidUpdate = (prevProps) => {
     if (prevProps.currentName !== this.props.currentName) {
@@ -43,42 +39,45 @@ export default class IngredientModal extends Component {
     });
   };
 
-  onCloseModal = () => {
-    this.setState({
-      name: '',
-      quantity: '',
-    }, this.props.onClose());
-  };
-
-  handleSubmit = (event) => {
+  handleSubmit = () => {
     const body = {
       name: this.state.name,
       quantity: this.state.quantity,
     };
 
+    // ??? Switch instead
     if (this.props.modalType === 'add') {
       addIngredient(body)
         .then(() => {
-          this.props.onClose();
+          this.closeModal();
         });
     } else {
       updateIngredient(this.props.currentId, body)
         .then(() => {
-          this.props.onClose();
+          this.closeModal();
         });
     }
 
-    this.props.refreshComponent();
-  }
+    this.props.refreshComponent(); // ??? In every conditions above
+  };
+
+  closeModal = () => {
+    this.props.closeModal();
+
+    this.setState({
+      name: '',
+      quantity: '',
+    });
+  };
 
   render() {
-    const { modalType, open } = this.props;
+    const { modalType, isModalOpened } = this.props;
     const { name, quantity } = this.state;
 
     return (
       <Dialog
-        open={open}
-        onClose={this.onCloseModal}
+        open={isModalOpened}
+        onClose={this.closeModal}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Ingredient</DialogTitle>
@@ -116,7 +115,7 @@ export default class IngredientModal extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={this.onCloseModal} >
+          <Button color="primary" onClick={this.closeModal} >
             Cancel
           </Button>
           <Button color="primary" onClick={this.handleSubmit} >

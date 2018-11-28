@@ -6,6 +6,10 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   button: {
     margin: theme.spacing.unit,
   },
@@ -17,7 +21,7 @@ class IngredientHeader extends Component {
 
     return (
       <>
-        <div style={{display:"flex", justifyContent:"space-between"}}>
+        <div className={classes.wrapper}>
           <Typography variant="h5" component="h3">
             Ingredient(s)
           </Typography>
