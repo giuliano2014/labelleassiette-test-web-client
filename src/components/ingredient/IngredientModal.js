@@ -7,18 +7,84 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import { addIngredient, updateIngredient } from 'utils/IngredientApi';
+
 export default class IngredientModal extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      quantity: '',
+    };
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.currentName !== this.props.currentName) {
+      this.setState({
+        name: this.props.currentName,
+      });
+    }
+
+    if (prevProps.currentQuantity !== this.props.currentQuantity) {
+      this.setState({
+        quantity: this.props.currentQuantity,
+      });
+    }
+  };
+
+  inputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  onCloseModal = () => {
+    this.setState({
+      name: '',
+      quantity: '',
+    }, this.props.onClose());
+  };
+
+  handleSubmit = (event) => {
+    const body = {
+      name: this.state.name,
+      quantity: this.state.quantity,
+    };
+
+    if (this.props.modalType === 'add') {
+      addIngredient(body)
+        .then(() => {
+          this.props.onClose();
+        });
+    } else {
+      updateIngredient(this.props.currentId, body)
+        .then(() => {
+          this.props.onClose();
+        });
+    }
+
+    this.props.refreshComponent();
+  }
+
   render() {
+    const { modalType, open } = this.props;
+    const { name, quantity } = this.state;
+
     return (
       <Dialog
-        open={this.props.open}
-        onClose={this.props.onClose}
+        open={open}
+        onClose={this.onCloseModal}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Ingredient</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You can update the information of the ingredient.
+            {modalType === 'add' ? 'You can add a new ingredient.' : 'You can update the information of the ingredient.'}
           </DialogContentText>
           <TextField
             label="Name"
@@ -30,6 +96,9 @@ export default class IngredientModal extends Component {
             InputLabelProps={{
               shrink: true,
             }}
+            name="name"
+            value={name}
+            onChange={this.inputChange}
           />
           <TextField
             label="Quantity"
@@ -41,14 +110,17 @@ export default class IngredientModal extends Component {
             InputLabelProps={{
               shrink: true,
             }}
+            name="quantity"
+            value={quantity}
+            onChange={this.inputChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={this.props.onClose} >
+          <Button color="primary" onClick={this.onCloseModal} >
             Cancel
           </Button>
-          <Button color="primary" onClick={this.props.onClose} >
-            Update
+          <Button color="primary" onClick={this.handleSubmit} >
+            {modalType === 'add' ? 'Save' : 'Update'}
           </Button>
         </DialogActions>
       </Dialog>

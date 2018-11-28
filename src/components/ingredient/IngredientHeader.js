@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
@@ -19,21 +19,20 @@ class IngredientHeader extends Component {
       <>
         <div style={{display:"flex", justifyContent:"space-between"}}>
           <Typography variant="h5" component="h3">
-            Ingredient management
+            Ingredient(s)
           </Typography>
-          <Button
-            variant="fab"
-            mini
+          <Fab
+            size="small"
             color="secondary"
             aria-label="Add"
             className={classes.button}
             onClick={openModal}
           >
             <AddIcon />
-          </Button>
+          </Fab>
         </div>
         <Typography component="p">
-          Here...
+          This is your ingredient manager
         </Typography>
       </>
     );
