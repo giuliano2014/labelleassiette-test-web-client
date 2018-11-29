@@ -7,6 +7,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -14,6 +16,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Create';
 
 import { getIngredients } from 'utils/IngredientApi';
+
+import IngredientPagination from 'components/ingredient/IngredientPagination';
 
 const styles = theme => ({
   loader: {
@@ -35,15 +39,17 @@ class IngredientList extends Component {
   state = {
     loading: true,
     ingredients: [],
+    page: 0,
+    rowsPerPage: 3,
   };
 
   componentDidMount = () => {
-    this.getIngredients();
+    this.getIngredients(this.state.page, this.state.rowsPerPage);
   };
 
   componentDidUpdate = prevProps => {
     if (prevProps.isButtonclicked !== this.props.isButtonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
-      this.getIngredients();
+      this.getIngredients(this.state.page, this.state.rowsPerPage);
     }
   };
 
@@ -51,8 +57,8 @@ class IngredientList extends Component {
     this.props.openModal('update', id, name, quantity);
   };
 
-  getIngredients = () => {
-    getIngredients()
+  getIngredients = (page, rowsPerPage) => {
+    getIngredients(page, rowsPerPage)
       .then(data => {
         this.setState({
           ingredients: data,
@@ -65,9 +71,25 @@ class IngredientList extends Component {
       });
   }
 
+  handleChangePage = (event, page) => {
+    this.setState({
+      page: page,
+    }, () => {
+      this.getIngredients(this.state.page, this.state.rowsPerPage);
+    });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({
+      rowsPerPage: event.target.value,
+    }, () => {
+      this.getIngredients(this.state.page, this.state.rowsPerPage);
+    });
+  };
+
   render() {
     const { classes, displaySnackbar } = this.props;
-    const { loading, ingredients } = this.state;
+    const { loading, ingredients, page, rowsPerPage } = this.state;
 
     return (
       <>
@@ -87,7 +109,7 @@ class IngredientList extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ingredients.map((ingredient, index) => {
+              {ingredients.docs.map((ingredient, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell component="th" scope="row">
@@ -112,6 +134,20 @@ class IngredientList extends Component {
                 );
               })}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[3, 6, 9]}
+                  colSpan={4}
+                  count={ingredients.total}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={IngredientPagination}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
       )}
