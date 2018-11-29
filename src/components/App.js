@@ -17,7 +17,7 @@ class App extends Component {
 
   componentDidMount = () => {
     window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -31,6 +31,7 @@ class App extends Component {
       </div>
     );
   }
+
 }
 
 App.propTypes = {

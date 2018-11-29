@@ -32,7 +32,6 @@ const styles = theme => ({
 });
 
 class IngredientList extends Component {
-
   state = {
     loading: true,
     ingredients: [],
@@ -42,8 +41,8 @@ class IngredientList extends Component {
     this.getIngredients();
   };
 
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.isButonclicked !== this.props.isButonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
+  componentDidUpdate = prevProps => {
+    if (prevProps.isButtonclicked !== this.props.isButtonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
       this.getIngredients();
     }
   };
@@ -59,9 +58,11 @@ class IngredientList extends Component {
           ingredients: data,
         });
       })
-      .then((projects) => this.setState({
-        loading: false,
-      }));
+      .then(() => {
+        this.setState({
+          loading: false,
+        });
+      });
   }
 
   render() {
@@ -86,22 +87,22 @@ class IngredientList extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ingredients.map((row, index) => {
+              {ingredients.map((ingredient, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {ingredient.name}
                     </TableCell>
-                    <TableCell numeric>{row.quantity}</TableCell>
+                    <TableCell numeric>{ingredient.quantity}</TableCell>
                     <TableCell numeric>
-                      <Tooltip title="Update" onClick={() => this.displayModal(row._id, row.name, row.quantity)}>
+                      <Tooltip title="Update" onClick={() => this.displayModal(ingredient._id, ingredient.name, ingredient.quantity)}>
                         <IconButton aria-label="Update">
                           <UpdateIcon />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
                     <TableCell numeric>
-                      <Tooltip title="Delete" onClick={() => displaySnackbar(row._id, row.name)}>
+                      <Tooltip title="Delete" onClick={() => displaySnackbar(ingredient._id, ingredient.name)}>
                         <IconButton aria-label="Delete">
                           <DeleteIcon />
                         </IconButton>
@@ -121,6 +122,9 @@ class IngredientList extends Component {
 
 IngredientList.propTypes = {
   classes: PropTypes.object.isRequired,
+  isButtonclicked: PropTypes.bool.isRequired,
+  isIngredientDeleted: PropTypes.bool.isRequired,
+  displaySnackbar: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(IngredientList);

@@ -24,16 +24,19 @@ const styles = {
 
 class Header extends Component {
   state = {
-    auth: true,
     anchorEl: null,
   };
 
   handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({
+      anchorEl: null,
+    });
   };
 
   render() {

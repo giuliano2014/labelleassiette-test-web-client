@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,17 +10,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { addIngredient, updateIngredient } from 'utils/IngredientApi';
 
-export default class IngredientModal extends Component {
+class IngredientModal extends Component {
+  state = {
+    name: '',
+    quantity: '',
+  };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      quantity: '',
-    };
-  }
-
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (prevProps.currentName !== this.props.currentName) {
       this.setState({
         name: this.props.currentName,
@@ -43,14 +40,7 @@ export default class IngredientModal extends Component {
     });
   };
 
-  onCloseModal = () => {
-    this.setState({
-      name: '',
-      quantity: '',
-    }, this.props.onClose());
-  };
-
-  handleSubmit = (event) => {
+  handleSubmit = () => {
     const body = {
       name: this.state.name,
       quantity: this.state.quantity,
@@ -59,26 +49,35 @@ export default class IngredientModal extends Component {
     if (this.props.modalType === 'add') {
       addIngredient(body)
         .then(() => {
-          this.props.onClose();
+          this.closeModal();
+          this.props.refreshComponent();
         });
     } else {
       updateIngredient(this.props.currentId, body)
         .then(() => {
-          this.props.onClose();
+          this.closeModal();
+          this.props.refreshComponent();
         });
     }
+  };
 
-    this.props.refreshComponent();
-  }
+  closeModal = () => {
+    this.setState({
+      name: '',
+      quantity: '',
+    });
+
+    this.props.closeModal();
+  };
 
   render() {
-    const { modalType, open } = this.props;
+    const { modalType, isModalOpened } = this.props;
     const { name, quantity } = this.state;
 
     return (
       <Dialog
-        open={open}
-        onClose={this.onCloseModal}
+        open={isModalOpened}
+        onClose={this.closeModal}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Ingredient</DialogTitle>
@@ -116,7 +115,7 @@ export default class IngredientModal extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={this.onCloseModal} >
+          <Button color="primary" onClick={this.closeModal} >
             Cancel
           </Button>
           <Button color="primary" onClick={this.handleSubmit} >
@@ -127,3 +126,15 @@ export default class IngredientModal extends Component {
     );
   }
 }
+
+IngredientModal.propTypes = {
+  modalType: PropTypes.string,
+  currentId: PropTypes.string,
+  currentName: PropTypes.string.isRequired,
+  currentQuantity: PropTypes.string.isRequired,
+  isModalOpened: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  refreshComponent: PropTypes.func.isRequired,
+};
+
+export default IngredientModal;

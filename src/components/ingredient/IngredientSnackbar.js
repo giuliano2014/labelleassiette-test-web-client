@@ -14,7 +14,13 @@ const styles = theme => ({
 
 class SimpleSnackbar extends Component {
   render() {
-    const { classes, open, hideSnackbar, deleteIngredient, ingredientName } = this.props;
+    const {
+      classes,
+      currentName,
+      isSnackbarDisplay,
+      hideSnackbar,
+      deleteIngredient
+    } = this.props;
 
     return (
       <Snackbar
@@ -22,13 +28,13 @@ class SimpleSnackbar extends Component {
           vertical: 'bottom',
           horizontal: 'left',
         }}
-        open={open}
+        open={isSnackbarDisplay}
         autoHideDuration={6000}
         onClose={deleteIngredient}
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">{ingredientName} have been deleted</span>}
+        message={<span id="message-id">{currentName} have been deleted</span>}
         action={[
           <Button key="undo" color="secondary" size="small" onClick={hideSnackbar}>
             UNDO
@@ -50,6 +56,10 @@ class SimpleSnackbar extends Component {
 
 SimpleSnackbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  currentName: PropTypes.string.isRequired,
+  isSnackbarDisplay: PropTypes.bool.isRequired,
+  hideSnackbar: PropTypes.func.isRequired,
+  deleteIngredient: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(SimpleSnackbar);
