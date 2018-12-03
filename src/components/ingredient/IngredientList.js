@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -98,58 +99,64 @@ class IngredientList extends Component {
           <LinearProgress color="secondary" />
         </div>
         ) : (
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Ingredient(s)</TableCell>
-                <TableCell numeric>Quantity (g)</TableCell>
-                <TableCell numeric>Update</TableCell>
-                <TableCell numeric>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {ingredients.docs.map((ingredient, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                      {ingredient.name}
-                    </TableCell>
-                    <TableCell numeric>{ingredient.quantity}</TableCell>
-                    <TableCell numeric>
-                      <Tooltip title="Update" onClick={() => this.displayModal(ingredient._id, ingredient.name, ingredient.quantity)}>
-                        <IconButton aria-label="Update">
-                          <UpdateIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell numeric>
-                      <Tooltip title="Delete" onClick={() => displaySnackbar(ingredient._id, ingredient.name)}>
-                        <IconButton aria-label="Delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[3, 6, 9]}
-                  colSpan={4}
-                  count={ingredients.total}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={IngredientPagination}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </Paper>
+        ingredients.docs && ingredients.docs.length > 0 ? (
+          <Paper className={classes.root}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Ingredient(s)</TableCell>
+                  <TableCell numeric>Quantity (g)</TableCell>
+                  <TableCell numeric>Update</TableCell>
+                  <TableCell numeric>Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {ingredients.docs.map((ingredient, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        {ingredient.name}
+                      </TableCell>
+                      <TableCell numeric>{ingredient.quantity}</TableCell>
+                      <TableCell numeric>
+                        <Tooltip title="Update" onClick={() => this.displayModal(ingredient._id, ingredient.name, ingredient.quantity)}>
+                          <IconButton aria-label="Update">
+                            <UpdateIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell numeric>
+                        <Tooltip title="Delete" onClick={() => displaySnackbar(ingredient._id, ingredient.name)}>
+                          <IconButton aria-label="Delete">
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[3, 6, 9]}
+                    colSpan={4}
+                    count={ingredients.total}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={IngredientPagination}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </Paper>
+        ) : (
+          <Typography variant="caption" gutterBottom>
+            Add your first ingredient, by clicking on the + button, at the top right
+          </Typography>
+        )
       )}
       </>
     );
