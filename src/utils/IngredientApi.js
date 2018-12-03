@@ -2,13 +2,13 @@ import axios from 'axios';
 
 import { DOMAIN } from 'utils/constants';
 
-// const getIngredients = () => {
-//   return axios.get(`${DOMAIN}/api/ingredients/`)
-//     .then(res => res.data)
-//     .catch(err => console.error(err));
-// };
+const getIngredients = () => {
+  return axios.get(`${DOMAIN}/api/ingredients/`)
+    .then(res => res.data)
+    .catch(err => console.error(err));
+};
 
-const getIngredients = (page, limit) => {
+const getIngredientsWithPagination = (page, limit) => {
   return axios.get(`${DOMAIN}/api/ingredients/${page}/${limit}`)
     .then(res => res.data)
     .catch(err => console.error(err));
@@ -38,4 +38,11 @@ const deleteIngredient = (id) => {
   .catch(err => console.error(err));
 };
 
-export { getIngredients, getCurrentIngredient, addIngredient, updateIngredient, deleteIngredient };
+export {
+  getIngredients,
+  getIngredientsWithPagination,
+  getCurrentIngredient,
+  addIngredient,
+  updateIngredient,
+  deleteIngredient
+};

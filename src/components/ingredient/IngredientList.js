@@ -16,7 +16,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Create';
 
-import { getIngredients } from 'utils/IngredientApi';
+import { getIngredientsWithPagination } from 'utils/IngredientApi';
 
 import IngredientPagination from 'components/ingredient/IngredientPagination';
 
@@ -45,12 +45,12 @@ class IngredientList extends Component {
   };
 
   componentDidMount = () => {
-    this.getIngredients(this.state.page, this.state.rowsPerPage);
+    this.getIngredientsWithPagination(this.state.page, this.state.rowsPerPage);
   };
 
   componentDidUpdate = prevProps => {
     if (prevProps.isButtonclicked !== this.props.isButtonclicked || prevProps.isIngredientDeleted !== this.props.isIngredientDeleted) {
-      this.getIngredients(this.state.page, this.state.rowsPerPage);
+      this.getIngredientsWithPagination(this.state.page, this.state.rowsPerPage);
     }
   };
 
@@ -58,8 +58,8 @@ class IngredientList extends Component {
     this.props.openModal('update', id, name, quantity);
   };
 
-  getIngredients = (page, rowsPerPage) => {
-    getIngredients(page, rowsPerPage)
+  getIngredientsWithPagination = (page, rowsPerPage) => {
+    getIngredientsWithPagination(page, rowsPerPage)
       .then(data => {
         this.setState({
           ingredients: data,
@@ -76,7 +76,7 @@ class IngredientList extends Component {
     this.setState({
       page: page,
     }, () => {
-      this.getIngredients(this.state.page, this.state.rowsPerPage);
+      this.getIngredientsWithPagination(this.state.page, this.state.rowsPerPage);
     });
   };
 
@@ -84,7 +84,7 @@ class IngredientList extends Component {
     this.setState({
       rowsPerPage: event.target.value,
     }, () => {
-      this.getIngredients(this.state.page, this.state.rowsPerPage);
+      this.getIngredientsWithPagination(this.state.page, this.state.rowsPerPage);
     });
   };
 
@@ -99,7 +99,11 @@ class IngredientList extends Component {
           <LinearProgress color="secondary" />
         </div>
         ) : (
-        ingredients.docs && ingredients.docs.length > 0 ? (
+        ingredients.total === 0 ? (
+          <Typography variant="caption" gutterBottom>
+            Add your first ingredient, by clicking on the + button, at the top right
+          </Typography>
+        ) : (
           <Paper className={classes.root}>
             <Table className={classes.table}>
               <TableHead>
@@ -152,10 +156,6 @@ class IngredientList extends Component {
               </TableFooter>
             </Table>
           </Paper>
-        ) : (
-          <Typography variant="caption" gutterBottom>
-            Add your first ingredient, by clicking on the + button, at the top right
-          </Typography>
         )
       )}
       </>
