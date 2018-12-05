@@ -8,6 +8,12 @@ const getIngredients = () => {
     .catch(err => console.error(err));
 };
 
+const getIngredientsWithPagination = (page, limit) => {
+  return axios.get(`${DOMAIN}/api/ingredients/${page}/${limit}`)
+    .then(res => res.data)
+    .catch(err => console.error(err));
+};
+
 const getCurrentIngredient = (id) => {
   return axios.get(`${DOMAIN}/api/ingredients/${id}`)
     .then(res => res.data)
@@ -32,4 +38,11 @@ const deleteIngredient = (id) => {
   .catch(err => console.error(err));
 };
 
-export { getIngredients, getCurrentIngredient, addIngredient, updateIngredient, deleteIngredient };
+export {
+  getIngredients,
+  getIngredientsWithPagination,
+  getCurrentIngredient,
+  addIngredient,
+  updateIngredient,
+  deleteIngredient
+};
