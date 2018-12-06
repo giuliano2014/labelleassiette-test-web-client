@@ -1,10 +1,10 @@
 # labelleassiette-test-web-client
 
-This is only the API crud of test.
+This is only the web client of the test.
 
-I've used Express Generator and MongoDB.
+I've used Create React App & Material-UI.
 
-## To launch API project, follow steps behind :
+## To launch web client project, follow steps behind :
 
 1. git clone of the repository
 
