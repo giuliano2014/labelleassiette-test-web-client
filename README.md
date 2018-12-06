@@ -4,7 +4,7 @@ This is only the web client of the test.
 
 I've used Create React App & Material-UI.
 
-## To launch API project, follow steps behind :
+## To launch web client project, follow steps behind :
 
 1. git clone of the repository
 
@@ -21,4 +21,3 @@ I've used Create React App & Material-UI.
 7. go to http://localhost:9000/
 
 **Enjoy :)**
-
