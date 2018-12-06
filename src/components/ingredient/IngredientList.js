@@ -121,7 +121,7 @@ class IngredientList extends Component {
                       <TableCell component="th" scope="row">
                         {ingredient.name}
                       </TableCell>
-                      <TableCell numeric>{ingredient.quantity}</TableCell>
+                      <TableCell numeric>{ingredient.quantity || '0'}</TableCell>
                       <TableCell numeric>
                         <Tooltip title="Update" onClick={() => this.displayModal(ingredient._id, ingredient.name, ingredient.quantity)}>
                           <IconButton aria-label="Update">

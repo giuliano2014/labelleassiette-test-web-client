@@ -9,11 +9,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { addIngredient, updateIngredient } from 'utils/IngredientApi';
+import { NumberFormatInGrams } from 'utils/NumberFormat';
 
 class IngredientModal extends Component {
   state = {
     name: '',
     quantity: '',
+    errorMessage: '',
   };
 
   componentDidUpdate = prevProps => {
@@ -30,21 +32,24 @@ class IngredientModal extends Component {
     }
   };
 
-  inputChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
+  inputChange = name => event => {
     this.setState({
-      [name]: value,
+      [name]: event.target.value,
     });
   };
 
   handleSubmit = () => {
     const body = {
       name: this.state.name,
-      quantity: this.state.quantity,
+      quantity: parseInt(this.state.quantity),
     };
+
+    if (!body.name) {
+      this.setState({
+        errorMessage: '* Required field',
+      });
+      return;
+    }
 
     if (this.props.modalType === 'add') {
       addIngredient(body)
@@ -65,6 +70,7 @@ class IngredientModal extends Component {
     this.setState({
       name: '',
       quantity: '',
+      errorMessage: '',
     });
 
     this.props.closeModal();
@@ -72,7 +78,7 @@ class IngredientModal extends Component {
 
   render() {
     const { modalType, isModalOpened } = this.props;
-    const { name, quantity } = this.state;
+    const { name, quantity, errorMessage } = this.state;
 
     return (
       <Dialog
@@ -89,15 +95,16 @@ class IngredientModal extends Component {
             label="Name"
             style={{ marginTop: 24, marginBottom: 16, }}
             placeholder="Strawberries"
+            helperText={errorMessage}
+            error={errorMessage === '' ? false : true}
             fullWidth
             margin="normal"
             variant="outlined"
             InputLabelProps={{
               shrink: true,
             }}
-            name="name"
             value={name}
-            onChange={this.inputChange}
+            onChange={this.inputChange('name')}
           />
           <TextField
             label="Quantity"
@@ -109,9 +116,11 @@ class IngredientModal extends Component {
             InputLabelProps={{
               shrink: true,
             }}
-            name="quantity"
+            InputProps={{
+              inputComponent: NumberFormatInGrams,
+            }}
             value={quantity}
-            onChange={this.inputChange}
+            onChange={this.inputChange('quantity')}
           />
         </DialogContent>
         <DialogActions>
@@ -131,7 +140,6 @@ IngredientModal.propTypes = {
   modalType: PropTypes.string,
   currentId: PropTypes.string,
   currentName: PropTypes.string.isRequired,
-  currentQuantity: PropTypes.string.isRequired,
   isModalOpened: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   refreshComponent: PropTypes.func.isRequired,
