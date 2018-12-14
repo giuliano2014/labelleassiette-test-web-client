@@ -1,3 +1,3 @@
 export const DOMAIN = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:3000'
-  : 'https://labelleassiette-api.herokuapp.com';
+  ? process.env.REACT_APP_DEV_DOMAIN
+  : process.env.REACT_APP_PROD_DOMAIN;

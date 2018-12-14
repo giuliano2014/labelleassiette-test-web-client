@@ -44,5 +44,5 @@ export {
   getCurrentIngredient,
   addIngredient,
   updateIngredient,
-  deleteIngredient
+  deleteIngredient,
 };
